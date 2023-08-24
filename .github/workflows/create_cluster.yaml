@@ -40,6 +40,42 @@ on:
             - us-east-1
             - us-east-1
             - us-west-1
+        zones:
+          description: 'zones'
+          type: choice
+          required: true
+          options:
+            - choose
+            - us-east-1a,us-east-1b,us-east-1c
+            - us-east-2a,us-east-2b,us-east-2c
+            - us-west-1a,us-west-1b,us-west-1c
+        control_plane_size:
+          description: 'control plane size'
+          type: choice
+          required: true
+          options:
+            - choose
+            - t2.micro
+            - t3.micro
+            - t3.nano
+        node_size:
+          description: 'node size'
+          type: choice
+          required: true
+          options:
+            - choose
+            - t2.micro
+            - t3.micro
+            - t3.nano
+        count:
+          description: "node count"
+          type: choice
+          required: true
+          options:
+            - choose
+            - 3
+            - 6
+            - 9
         
         
 jobs:
@@ -65,16 +101,13 @@ jobs:
 
       - name: creating the cluster
         run: |
-              export KOPS_STATE_STORE=${{ inputs.kops_state_store }}
-              export CONTROL_PLANE_SIZE="t3.micro"
-              export NODE_SIZE="t3.micro"
-              export ZONES="us-east-1a,us-east-1b,us-east-1c"
               kops delete cluster ${{ inputs.cluster_name }} \
-              --node-count 3 \
-              --zones $ZONES \
-              --node-size $NODE_SIZE \
-              --control-plane-size $CONTROL_PLANE_SIZE \
-              --control-plane-zones $ZONES \
+              --state=${{ inputs.kops_state_store }}
+              --node-count ${{ inputs.count }} \
+              --zones ${{ inputs.zones }} \
+              --node-size ${{ inputs.node_size}} \
+              --control-plane-size ${{ inputs.control_plane_size }} \
+              --control-plane-zones ${{ inputs.zones }} \
               --networking cilium \
               --topology private \
               --bastion="true" \
