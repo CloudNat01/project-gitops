@@ -46,9 +46,9 @@ on:
           required: true
           options:
             - choose
-            - us-east-1a,us-east-1b,us-east-1c
-            - us-east-2a,us-east-2b,us-east-2c
-            - us-west-1a,us-west-1b,us-west-1c
+            - "us-east-1a,us-east-1b,us-east-1c"
+            - "us-east-2a,us-east-2b,us-east-2c"
+            - "us-west-1a,us-west-1b,us-west-1c"
         control_plane_size:
           description: 'control plane size'
           type: choice
