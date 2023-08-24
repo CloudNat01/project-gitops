@@ -1,0 +1,43 @@
+name: create kops cluster
+
+on:
+    workflow_dispatch:
+      inputs:
+        cluster_name:
+          description: 'name fo cluster'
+          required: true
+          default: 'warning'
+          type: choice
+          options:
+          - kubeclusterapp.com
+          - clusterplay.com
+          - klusterapp.com
+        kops_state_store:
+          description: 'bucket to use'
+          required: true
+          type: choice
+          options:
+            - bk-store
+            - sk-store
+            - ck-store
+        environment:
+          description: 'Environment to run tests against'
+          type: choice
+          required: true
+          options:
+            - dev
+            - stg
+            - prd
+  
+jobs:
+  log-the-inputs:
+    runs-on: ubuntu-latest
+    steps:
+      - run: |
+          echo "Log level: $LEVEL"
+          echo "Tags: $TAGS"
+          echo "Environment: $ENVIRONMENT"
+        env:
+          LEVEL: ${{ inputs.logLevel }}
+          TAGS: ${{ inputs.tags }}
+          ENVIRONMENT: ${{ inputs.environment }}
