@@ -48,9 +48,9 @@ jobs:
 
       - name: creating the cluster
         run: |
-              export KOPS_STATE_STORE="kops-state-bk2"
+              export KOPS_STATE_STORE="s3://kops-state-bk2"
               export NODE_SIZE="t3.micro"
-              export ZONES="us-east-1a,us-east-1b,us-east-1c"
+              export ZONES="us-east-1a, us-east-1b, us-east-1c"
               kops create cluster kubeclusterapp.com \
               --node-count 3 \
               --zones $ZONES \
