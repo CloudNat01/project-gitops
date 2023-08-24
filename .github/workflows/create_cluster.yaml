@@ -4,7 +4,7 @@ on:
     workflow_dispatch:
       inputs:
         cluster_name:
-          description: 'name fo cluster'
+          description: 'name ofcluster'
           required: true
           default: 'warning'
           type: choice
@@ -101,7 +101,7 @@ jobs:
 
       - name: creating the cluster
         run: |
-              kops delete cluster ${{ inputs.cluster_name }} \
+              kops create cluster ${{ inputs.cluster_name }} \
               --state=${{ inputs.kops_state_store }}
               --node-count ${{ inputs.count }} \
               --zones ${{ inputs.zones }} \
