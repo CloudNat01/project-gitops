@@ -9,14 +9,16 @@ on:
           default: 'warning'
           type: choice
           options:
+          - choose
           - kubeclusterapp.com
           - clusterplay.com
           - klusterapp.com
         kops_state_store:
-          description: 'bucket to use'
+          description: 'Pick which bucket to use'
           required: true
           type: choice
           options:
+            - choose
             - bk-store
             - sk-store
             - ck-store
@@ -25,6 +27,7 @@ on:
           type: choice
           required: true
           options:
+            - choose
             - dev
             - stg
             - prd
@@ -33,11 +36,15 @@ jobs:
   log-the-inputs:
     runs-on: ubuntu-latest
     steps:
-      - run: |
-          echo "Log level: $LEVEL"
-          echo "Tags: $TAGS"
-          echo "Environment: $ENVIRONMENT"
-        env:
-          LEVEL: ${{ inputs.logLevel }}
-          TAGS: ${{ inputs.tags }}
-          ENVIRONMENT: ${{ inputs.environment }}
+      - name: checkout
+        uses: actions/checkout@v3
+
+      - name: installing latest version of kops
+        run: |
+              curl -LO https://github.com/kubernetes/kops/releases/download/$(curl -s https://api.github.com/repos/kubernetes/kops/releases/latest | grep tag_name | cut -d '"' -f 4)/kops-linux-amd64
+              chmod +x kops-linux-amd64
+              sudo mv kops-linux-amd64 /usr/local/bin/kops
+              kops
+
+
+
