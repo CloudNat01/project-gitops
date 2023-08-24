@@ -67,7 +67,7 @@ jobs:
               export CONTROL_PLANE_SIZE="t3.micro"
               export NODE_SIZE="t3.micro"
               export ZONES="us-east-1a,us-east-1b,us-east-1c"
-              kops create cluster ${{ inputs.cluster_name }} \
+              kops delete cluster ${{ inputs.cluster_name }} \
               --node-count 3 \
               --zones $ZONES \
               --node-size $NODE_SIZE \
