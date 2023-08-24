@@ -31,7 +31,17 @@ on:
             - dev
             - stg
             - prd
-  
+        region:
+          description: 'Region to use'
+          type: choice
+          required: true
+          options:
+            - choose
+            - us-east-1
+            - us-east-1
+            - us-west-1
+        
+        
 jobs:
   cluster-build:
     runs-on: ubuntu-latest
@@ -45,7 +55,12 @@ jobs:
               chmod +x kops-linux-amd64
               sudo mv kops-linux-amd64 /usr/local/bin/kops
               kops
-
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ inputs.region }}
       - name: creating the cluster
         run: |
               export KOPS_STATE_STORE="s3://kops-state-bk2"
