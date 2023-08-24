@@ -62,31 +62,7 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ inputs.region }}
 
-
-      - name: creating the cluster
+      - name: deleting cluster
         run: |
-              export KOPS_STATE_STORE= ${{ inputs.kops_state_store }}
-              export CONTROL_PLANE_SIZE="t3.micro"
-              export NODE_SIZE="t3.micro"
-              export ZONES="us-east-1a,us-east-1b,us-east-1c"
-              kops delete cluster ${{ inputs.cluster_name }} \
-              --node-count 3 \
-              --zones $ZONES \
-              --node-size $NODE_SIZE \
-              --control-plane-size $CONTROL_PLANE_SIZE \
-              --control-plane-zones $ZONES \
-              --networking cilium \
-              --topology private \
-              --bastion="true" \
-              --yes
+             kops delete cluster --name=${{ inputs.cluster_name }} --state=${{ inputs.kops_state_store }} --yes
 
-      - name: Setup Kops
-        uses: hiberbee/github-action-kops@latest
-        with:
-          command: validate cluster
-          cluster-name: ${{ inputs.cluster_name }}
-          state-store: ${{ inputs.kops_state_store}}
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          AWS_REGION: ${{ inputs.region }}  
