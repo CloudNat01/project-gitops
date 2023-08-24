@@ -33,7 +33,7 @@ on:
             - prd
   
 jobs:
-  log-the-inputs:
+  cluster-build:
     runs-on: ubuntu-latest
     steps:
       - name: checkout
@@ -45,6 +45,23 @@ jobs:
               chmod +x kops-linux-amd64
               sudo mv kops-linux-amd64 /usr/local/bin/kops
               kops
+
+      - name: creating the cluster
+        run: |
+              export KOPS_STATE_STORE="kops-state-bk2"
+              export NODE_SIZE="t3.micro"
+              export ZONES="us-east-1a,us-east-1b,us-east-1c"
+              kops create cluster kubeclusterapp.com \
+              --node-count 3 \
+              --zones $ZONES \
+              --node-size $NODE_SIZE \
+              --control-plane-size $CONTROL_PLANE_SIZE \
+              --control-plane-zones $ZONES \
+              --networking cilium \
+              --topology private \
+              --cloud=aws \
+              --bastion="true" \
+              --yes
 
 
 
