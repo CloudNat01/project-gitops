@@ -114,13 +114,6 @@ jobs:
               --bastion="true" \
               --yes
 
-      - name: Setup Kops
-        uses: hiberbee/github-action-kops@latest
-        with:
-          command: validate cluster
-          cluster-name: ${{ inputs.cluster_name }}
-          state-store: ${{ inputs.kops_state_store}}
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          AWS_REGION: ${{ inputs.region }}  
+      - name: validating cluster
+        run: |
+            kops validate cluster ${{ inputs.cluster_name }} --state ${{ inputs.kops_state_store }} 
