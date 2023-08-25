@@ -103,7 +103,7 @@ jobs:
         run: |
               export ZONES="${{ inputs.zones }}"
               kops create cluster ${{ inputs.cluster_name }} \
-              --state=${{ inputs.kops_state_store }}
+              --state=${{ inputs.kops_state_store }} \
               --node-count ${{ inputs.count }} \
               --zones $ZONES \
               --node-size ${{ inputs.node_size}} \
